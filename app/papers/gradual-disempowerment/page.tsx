@@ -72,7 +72,7 @@ function Citation({
   useEffect(() => {
     async function loadBib() {
       // Replace with your GitHub raw URL
-      const githubBibUrl = 'https://raw.githubusercontent.com/inyoungcheong/papers/refs/heads/main/app/data/references.bib'
+      const githubBibUrl = 'https://raw.githubusercontent.com/username/repo/main/references.bib'
       const loadedCitations = await fetchBibFromGitHub(githubBibUrl)
       setCitations(loadedCitations)
     }
