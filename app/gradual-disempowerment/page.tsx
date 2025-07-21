@@ -120,10 +120,10 @@ function Citation({
       if (cite.number) formatted += `(${cite.number})`
       if (cite.pages) formatted += `, ${cite.pages.replace('--', '–')}`
       return formatted + '.'
-    } else {
-      // This handles any unexpected citation types
-      return `${authors} (${cite.year}). ${cite.title}.`
     }
+    
+    // Fallback for any other types (should not happen with current data)
+    return `${authors} (${(cite as any).year}). ${cite.title}.`
   }
 
   return (
