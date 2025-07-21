@@ -2,11 +2,34 @@
 
 'use client'
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+
+// Define proper types for citations
+type BookCitation = {
+  type: 'book'
+  author: string
+  title: string
+  publisher: string
+  year: string
+}
+
+type ArticleCitation = {
+  type: 'article'
+  author: string
+  title: string
+  journal: string
+  volume?: string
+  number?: string
+  pages?: string
+  year: string
+}
+
+type Citation = BookCitation | ArticleCitation
+
+type CitationData = Record<string, Citation>
 
 // This would be your parsed .bib data (from build time or static import)
 // You can fetch this from GitHub raw URL or import locally
-const bibData = {
+const bibData: CitationData = {
   "russell2019human": {
     type: "book",
     author: "Russell, Stuart",
@@ -41,11 +64,9 @@ const citationMap = {
 }
 
 // Function to fetch and parse .bib file from GitHub
-async function fetchBibFromGitHub(url: string) {
+async function fetchBibFromGitHub(url: string): Promise<CitationData> {
   try {
     const response = await fetch(url)
-    const bibText = await response.text()
-    
     // You'd use a BibTeX parser here like 'bibtex-parser'
     // const parsedBib = parseBibTeX(bibText)
     // return parsedBib
@@ -88,7 +109,7 @@ function Citation({
     return <span className="text-red-500">[?]</span>
   }
 
-  const formatCitation = (cite: typeof citation) => {
+  const formatCitation = (cite: Citation) => {
     const authors = cite.author?.replace(/,\s*([^,]+)$/g, ' and $1') || 'Unknown Author'
     
     if (cite.type === 'book') {
@@ -151,8 +172,8 @@ function Citation({
   )
 }
 
-// Usage in your paper:
-export default function GradualDisempowerment() {
+// Usage in your main page:
+export default function MainPage() {
   // ... rest of your component
 
   return (
