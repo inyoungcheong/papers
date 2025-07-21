@@ -105,20 +105,23 @@ function Citation({
 
   return (
     <span className="relative inline-block">
-      <a 
-        href={`#${bibKey}`}
-        className={`text-blue-600 hover:text-neutral-700 transition-all duration-200 font-medium text-sm ${className}`}
+      <button 
+        type="button"
+        className={`text-blue-600 hover:text-neutral-700 transition-all duration-200 font-medium text-sm bg-transparent border-none cursor-pointer p-0 ${className}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={() => {
+          const element = document.getElementById(bibKey);
+          if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }}
       >
         [{citationNumber}]
-      </a>
+      </button>
       
       {/* BibTeX Tooltip */}
       {isHovered && (
         <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-96 max-w-sm z-50">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-700 font-sans leading-relaxed">
-            <div className="text-xs text-gray-500 mb-2 font-mono">{bibKey}</div>
             <div className="text-sm">{formatCitation(citation)}</div>
             
             {/* BibTeX entry preview */}
