@@ -6,6 +6,9 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
+  },
+  experimental: {
+    appDir: true
   }
 }
 
