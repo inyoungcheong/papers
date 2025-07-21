@@ -106,7 +106,7 @@ function Citation({
 {`@${citation.type}{${bibKey},
   author = {${citation.author}},
   title = {${citation.title}},
-  year = {${citation.year}},${citation.type === 'book' ? `
+  year = {${citation.year}},${citation.type === 'book' && 'publisher' in citation ? `
   publisher = {${citation.publisher}}` : `
   journal = {${'journal' in citation ? citation.journal : 'Unknown Journal'}}`}
 }`}
