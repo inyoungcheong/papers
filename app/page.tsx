@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white font-serif">
@@ -14,9 +16,9 @@ export default function Home() {
             <article className="bg-white border border-gray-100 hover:shadow-sm transition-all duration-200">
               <div className="p-8">
                 <h2 className="text-2xl font-bold mb-4 leading-tight">
-                  <a href="/papers/gradual-disempowerment" className="text-gray-900 hover:text-blue-600 transition-colors">
+                  <Link href="./papers/gradual-disempowerment" className="text-gray-900 hover:text-blue-600 transition-colors">
                     Systemic Existential Risks from Incremental AI Development
-                  </a>
+                  </Link>
                 </h2>
                 <div className="text-sm text-gray-500 mb-4 font-sans">
                   Research Team • July 20, 2024
@@ -27,12 +29,12 @@ export default function Home() {
                   an incremental increase in AI capabilities poses a substantial risk of eventual human disempowerment.
                 </p>
                 <div className="flex items-center">
-                  <a 
-                    href="/papers/gradual-disempowerment" 
+                  <Link 
+                    href="./papers/gradual-disempowerment" 
                     className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm font-sans"
                   >
                     Read full paper →
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
