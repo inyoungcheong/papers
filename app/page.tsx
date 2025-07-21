@@ -16,7 +16,7 @@ export default function Home() {
             <article className="bg-white border border-gray-100 hover:shadow-sm transition-all duration-200">
               <div className="p-8">
                 <h2 className="text-2xl font-bold mb-4 leading-tight">
-                  <Link href="./papers/gradual-disempowerment" className="text-gray-900 hover:text-blue-600 transition-colors">
+                  <Link href="/papers/gradual-disempowerment" className="text-gray-900 hover:text-blue-600 transition-colors">
                     Systemic Existential Risks from Incremental AI Development
                   </Link>
                 </h2>
@@ -30,7 +30,7 @@ export default function Home() {
                 </p>
                 <div className="flex items-center">
                   <Link 
-                    href="./papers/gradual-disempowerment" 
+                    href="/papers/gradual-disempowerment" 
                     className="text-blue-600 hover:text-blue-800 font-medium transition-colors text-sm font-sans"
                   >
                     Read full paper →
