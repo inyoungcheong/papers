@@ -59,7 +59,7 @@ function Citation({
   const formatCitation = (cite: typeof citation) => {
     const authors = cite.author?.replace(/,\s*([^,]+)$/g, ' and $1') || 'Unknown Author'
     
-    if (cite.type === 'book') {
+    if (cite.type === 'book' && 'publisher' in cite) {
       return `${authors} (${cite.year}). ${cite.title}. ${cite.publisher}.`
     } else {
       // Handle articles and any other types
