@@ -1,42 +1,8 @@
-// First, install: npm install bibtex-parser
-
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-// Define proper types for citations
-type BookCitation = {
-  type: 'book'
-  author: string
-  title: string
-  publisher: string
-  year: string
-}
-
-type ArticleCitation = {
-  type: 'article'
-  author: string
-  title: string
-  journal: string
-  volume?: string
-  number?: string
-  pages?: string
-  year: string
-}
-
-type GenericCitation = {
-  type: string
-  author: string
-  title: string
-  year: string
-}
-
-type Citation = BookCitation | ArticleCitation | GenericCitation
-
-type CitationData = Record<string, Citation>
-
-// This would be your parsed .bib data (from build time or static import)
-// You can fetch this from GitHub raw URL or import locally
-const bibData: CitationData = {
+// Simple citation data - no complex types for now
+const bibData = {
   "russell2019human": {
     type: "book",
     author: "Russell, Stuart",
@@ -70,22 +36,7 @@ const citationMap = {
   "bengio2024governance": 3
 }
 
-// Function to fetch and parse .bib file from GitHub
-async function fetchBibFromGitHub(url: string): Promise<CitationData> {
-  try {
-    await fetch(url)
-    // You'd use a BibTeX parser here like 'bibtex-parser'
-    // const parsedBib = parseBibTeX(bibText)
-    // return parsedBib
-    
-    return bibData // For now, return static data
-  } catch (error) {
-    console.error('Failed to fetch .bib file:', error)
-    return bibData
-  }
-}
-
-// Citation component with BibTeX data
+// Citation component - keeping it simple
 function Citation({ 
   bibKey, 
   className = "" 
@@ -94,21 +45,8 @@ function Citation({
   className?: string 
 }) {
   const [isHovered, setIsHovered] = useState(false)
-  const [citations, setCitations] = useState(bibData)
   
-  // Load .bib file on component mount
-  useEffect(() => {
-    async function loadBib() {
-      // Replace with your GitHub raw URL
-      const githubBibUrl = 'https://raw.githubusercontent.com/username/repo/main/references.bib'
-      const loadedCitations = await fetchBibFromGitHub(githubBibUrl)
-      setCitations(loadedCitations)
-    }
-    
-    loadBib()
-  }, [])
-  
-  const citation = citations[bibKey as keyof typeof citations]
+  const citation = bibData[bibKey as keyof typeof bibData]
   const citationNumber = citationMap[bibKey as keyof typeof citationMap]
   
   if (!citation || !citationNumber) {
@@ -116,21 +54,23 @@ function Citation({
     return <span className="text-red-500">[?]</span>
   }
 
-  const formatCitation = (cite: Citation) => {
+  const formatCitation = (cite: typeof citation) => {
     const authors = cite.author?.replace(/,\s*([^,]+)$/g, ' and $1') || 'Unknown Author'
     
     if (cite.type === 'book') {
       return `${authors} (${cite.year}). ${cite.title}. ${cite.publisher}.`
-    } else if (cite.type === 'article') {
-      let formatted = `${authors} (${cite.year}). ${cite.title}. ${cite.journal}`
-      if (cite.volume) formatted += `, ${cite.volume}`
-      if (cite.number) formatted += `(${cite.number})`
-      if (cite.pages) formatted += `, ${cite.pages.replace('--', '–')}`
-      return formatted + '.'
+    } else {
+      // Handle articles and any other types
+      let formatted = `${authors} (${cite.year}). ${cite.title}.`
+      if ('journal' in cite) {
+        formatted = `${authors} (${cite.year}). ${cite.title}. ${cite.journal}`
+        if ('volume' in cite && cite.volume) formatted += `, ${cite.volume}`
+        if ('number' in cite && cite.number) formatted += `(${cite.number})`
+        if ('pages' in cite && cite.pages) formatted += `, ${cite.pages.replace('--', '–')}`
+        formatted += '.'
+      }
+      return formatted
     }
-    
-    // Fallback for any other types
-    return `${authors} (${cite.year}). ${cite.title}.`
   }
 
   return (
@@ -148,7 +88,7 @@ function Citation({
         [{citationNumber}]
       </button>
       
-      {/* BibTeX Tooltip */}
+      {/* Tooltip */}
       {isHovered && (
         <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-96 max-w-sm z-50">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 text-sm text-gray-700 font-sans leading-relaxed">
@@ -165,7 +105,7 @@ function Citation({
   title = {${citation.title}},
   year = {${citation.year}},${citation.type === 'book' ? `
   publisher = {${citation.publisher}}` : `
-  journal = {${citation.journal}}`}
+  journal = {${(citation as any).journal}}`}
 }`}
               </pre>
             </details>
@@ -183,12 +123,8 @@ function Citation({
 
 // Usage in your main page:
 export default function MainPage() {
-  // ... rest of your component
-
   return (
     <div className="min-h-screen bg-white font-serif">
-      {/* ... your existing content ... */}
-      
       <main className="max-w-4xl mx-auto px-6 py-12 lg:ml-80">
         <article className="prose prose-lg max-w-none">
           {/* Example usage with BibTeX keys */}
