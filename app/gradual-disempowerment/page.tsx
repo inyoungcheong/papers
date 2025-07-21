@@ -23,7 +23,14 @@ type ArticleCitation = {
   year: string
 }
 
-type Citation = BookCitation | ArticleCitation
+type GenericCitation = {
+  type: string
+  author: string
+  title: string
+  year: string
+}
+
+type Citation = BookCitation | ArticleCitation | GenericCitation
 
 type CitationData = Record<string, Citation>
 
@@ -122,8 +129,8 @@ function Citation({
       return formatted + '.'
     }
     
-    // Fallback for any other types (should not happen with current data)
-    return `${authors} (${(cite as any).year}). ${cite.title}.`
+    // Fallback for any other types
+    return `${authors} (${cite.year}). ${cite.title}.`
   }
 
   return (
