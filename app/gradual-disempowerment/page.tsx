@@ -66,7 +66,7 @@ const citationMap = {
 // Function to fetch and parse .bib file from GitHub
 async function fetchBibFromGitHub(url: string): Promise<CitationData> {
   try {
-    const response = await fetch(url)
+    await fetch(url)
     // You'd use a BibTeX parser here like 'bibtex-parser'
     // const parsedBib = parseBibTeX(bibText)
     // return parsedBib
@@ -120,8 +120,10 @@ function Citation({
       if (cite.number) formatted += `(${cite.number})`
       if (cite.pages) formatted += `, ${cite.pages.replace('--', '–')}`
       return formatted + '.'
+    } else {
+      // This handles any unexpected citation types
+      return `${authors} (${cite.year}). ${cite.title}.`
     }
-    return `${authors} (${cite.year}). ${cite.title}.`
   }
 
   return (
